@@ -1,29 +1,52 @@
 function initialize() {
-    var mapCanvas = document.getElementById('map');
-    var mapOptions = {
-        center: new google.maps.LatLng(0, 100),
-        zoom: 3,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    return new google.maps.Map(mapCanvas, mapOptions);
-};
+  google.maps.visualRefresh = true;
+  var isMobile = (navigator.userAgent.toLowerCase().indexOf('android') > -1) ||
+    (navigator.userAgent.match(/(iPod|iPhone|iPad|BlackBerry|Windows Phone|iemobile)/));
+  if (isMobile) {
+    var viewport = document.querySelector("meta[name=viewport]");
+    viewport.setAttribute('content', 'initial-scale=1.0, user-scalable=no');
+  }
+  var mapDiv = document.getElementById('googft-mapCanvas');
+  mapDiv.style.width = isMobile ? '100%' : '500px';
+  mapDiv.style.height = isMobile ? '100%' : '300px';
+  var map = new google.maps.Map(mapDiv, {
+    center: new google.maps.LatLng(12.919814126441667, -5.172790527343776),
+    zoom: 5,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  });
+  map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(document.getElementById('googft-legend-open'));
+  map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(document.getElementById('googft-legend'));
 
-var map = initialize();
+  layer = new google.maps.FusionTablesLayer({
+    map: map,
+    heatmap: { enabled: false },
+    query: {
+      select: "col2",
+      from: "1zbrdrrMcFmRnm7MMfhp6Lpu4jiFf3yvwbyZ8DSNA",
+      where: ""
+    },
+    options: {
+      styleId: 2,
+      templateId: 2
+    }
+  });
 
-map.data.loadGeoJson('data/test_geo.json');
-
-
-	
-
-function createButton(context, func){
-    var button = document.createElement("input");
-    button.type = "button";
-    button.value = "im a button";
-    button.onclick = func;
-    context.append(button);
+  if (isMobile) {
+    var legend = document.getElementById('googft-legend');
+    var legendOpenButton = document.getElementById('googft-legend-open');
+    var legendCloseButton = document.getElementById('googft-legend-close');
+    legend.style.display = 'none';
+    legendOpenButton.style.display = 'block';
+    legendCloseButton.style.display = 'block';
+    legendOpenButton.onclick = function() {
+      legend.style.display = 'block';
+      legendOpenButton.style.display = 'none';
+    }
+    legendCloseButton.onclick = function() {
+      legend.style.display = 'none';
+      legendOpenButton.style.display = 'block';
+    }
+  }
 }
 
-createButton($('#sample-data'), function(){
-	console.log('hello');
-});
-console.log('fin')
+google.maps.event.addDomListener(window, 'load', initialize);
