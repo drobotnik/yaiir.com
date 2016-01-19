@@ -4,35 +4,46 @@
   <?php
   echo "Hello World!<br>";
 
-//Connect To Database
-$hostname="localhost";
-$username="yahia_dba";
-$password="password";
-$dbname="yahiabase";
-$usertable="test_table";
-$yourfield = "rr";
+$config = array(
+'hostname'=>"localhost",
+'username'=>"yahia_dba",
+'password'=>"password",
+'dbname'=>"yahiabase",
+'table_name'=>'test_table'
+);
 
-
-mysql_connect($hostname,$username, $password) or die ("<html><script language='JavaScript'>alert('Unable to connect to database! Please try again later.'),history.go(-1)</script></html>");
-mysql_select_db($dbname);
-$query = "SELECT * FROM $usertable";
-$result = mysql_query($query);
-if($result){
-  while($row = mysql_fetch_array($result))  {
-    $name = $row["$yourfield"];
-    echo "Name: ".$name."<br>";
-  }};
-$result = mysql_query($query);
-
-if($result){
-  while($row = mysql_fetch_array($result)){
-    print_r($row);
-    echo "<br>";
+function get_columns($database){
+  $columns =  array();
+  $rs = $database;
+  for ($i = 0; $i < $rs->columnCount(); $i++) {
+      $col = $rs->getColumnMeta($i);
+      array_push($columns, $col['name']);
   }
-};
+  return $columns;
 
+}
 
-echo "Bye World....";
-echo '<br>From FTP HELLOOOOO'
+function get_full_table($opts, $table_name){
+  $conn_str = 'mysql:host='.$opts['hostname'].';dbname='.$opts['dbname'].';charset=utf8';
+  $db = new PDO($conn_str,
+  $opts['username'],
+  $opts['password']);
+  $result = $db -> query('SELECT * FROM '.$table_name);
+  return array(get_columns($result), $result);
+}
+
+$tab = get_full_table($config, 'test_table');
+foreach($tab[0] as $head){
+  echo $head;
+}
+echo '</br>';
+
+foreach ($tab[1] as $row) {
+  print_r($row);
+  print_r('</br>');
+}
+
+echo "</br>Bye World....";
+
 ?>
 </body>
