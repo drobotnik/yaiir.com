@@ -15,30 +15,53 @@ require 'db_functions.inc.php';
 
   ?>
 
-  <form id="frm1" action="form_action.asp">
-    Table name: <input type="text" value="test_table" name="tname"><br>
-    <input type="button" onclick="drawTable()" value="Display table">
+  <form id="frm1">
+    Table name: <input type="text" value="test_table" id="tname"><br>
+    <input type="submit" value="Display table">
   </form>
   <div id='tableBox'></div>
+
   <script type="text/javascript">
 
-    function getTable(){
-      $.ajax({
-        url: '/finance/foo.php', // this returns an application/json response...
-        cache: false
-      }).done(function(data){ // ...jquery knows to automatically decode it for us
-        console.log(data);
-        for (var item of data) {
-          console.log(item);
+$(document).ready(function() {
+
+  $('#frm1').on('submit', function(e) {
+    console.log(e);
+    $.ajax({
+      url: '/finance/foo.php', // this returns an application/json response...
+      cache: false,
+      data: {
+        tableName: $('#tname').val()
+      }
+    }).done(drawTable);
+
+    return false;
+  });
+
+});
+
+    function drawTable(table) {
+      var
+        headers = table['headers'],
+        rows = table['data'],
+        cols = '';
+
+      for (var header of headers){
+        cols += '<th>'+ header + '</th>';
+      }
+      var emptyTable = "<table id='transData'><thead><tr>" + cols + "</tr></thead><tbody></tbody></table>"
+      $('#tableBox').empty();
+      $('#tableBox').append(emptyTable);
+
+      for (var row of rows){
+        var rowHTML = '';
+        for (var col of headers){
+          rowHTML += "<td>" + row[col] + "</td>";
         }
-      });
+        console.log(rowHTML);
+        $("#transData tbody").append('<tr>' + rowHTML + '</tr>'); //this will append tr element to table... keep its reference for a while since we will add cels into it
+      }
     }
-
-    function drawTable() {
-      $(document.body).append('<div> click </div>');
-      getTable();
-    }
-
 
 
   </script>
