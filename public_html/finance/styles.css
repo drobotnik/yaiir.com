@@ -18,3 +18,9 @@ table td{
 table th{
   border: 2px solid black;
 }
+
+.db-box{
+  border: 1px solid black;
+  display: inline-block;
+
+}
