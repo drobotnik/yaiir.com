@@ -4,19 +4,9 @@ body {
 
 #tableBox{
   background-color: lightgray;
-  display: inline-block;
-}
+  min-height: 100px;
+  width: 100px;
 
-table{
-  border-collapse: collapse;
-  border: 1px solid black;
-}
-table td{
-  border: 1px solid black;
-}
-
-table th{
-  border: 2px solid black;
 }
 
 .db-box{
