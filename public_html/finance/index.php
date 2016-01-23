@@ -21,38 +21,12 @@ require 'db_functions.inc.php';
       Input string and int: </br><input type='text' id='strCol'><input type='text' id='intCol'><br>
       <input type="submit" value="Send rows">
     </form>
+    <form id='frm3' class="db-box">
+      CSV string: </br><input type='text' id='csv_row'><br>
+      <input type="submit" value="Send rows">
+    </form>
   </div>
 
-<<<<<<< HEAD
   <div id='tableBox'></div>
 
-=======
-  <form id="frm1" action="form_action.asp">
-    Table name: <input type="text" value="test_table" name="tname"><br>
-    <input type="button" onclick="drawTable()" value="Display table">
-  </form>
-  <div id='tableBox'></div>
-  <script type="text/javascript">
-
-    function getTable(){
-      $.ajax({
-        url: '/finance/foo.php', // this returns an application/json response...
-        cache: false
-      }).done(function(data){ // ...jquery knows to automatically decode it for us
-        console.log(data);
-        for (var item of data) {
-          console.log(item);
-        }
-      });
-    }
-
-    function drawTable() {
-      $(document.body).append('<div> click </div>');
-      getTable();
-    }
-
-
-
-  </script>
->>>>>>> parent of 6ab527d... implemented search and draw table
 </body>
