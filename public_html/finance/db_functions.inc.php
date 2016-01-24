@@ -32,22 +32,16 @@ function get_full_table($opts, $table_name){
   );
 }
 
-function addRow($opts, $info){
-  $db = get_database($opts);
-  $statement = $db->prepare("INSERT INTO test_table(col_a, col_b)
-    values(:colA, :colB)");
-  $statement->execute(array(
-    "colA"=> $info['col_a'],
-    "colB"=> (int)$info['col_b']
-  ));
-}
-
-function addCSVRow($opts, $info){
+function addCSVRows($opts, $info){
   $search_string = "INSERT INTO ". $info['tableName']." (col_a, col_b) values(:colA, :colB)";
   $db = get_database($opts);
   $statement = $db->prepare($search_string);
-  $statement->execute(array(
-    "colA"=> $info['csvFormData'][0],
-    "colB"=> (int)($info['csvFormData'][1])
-  ));
+  foreach ($info['csvFormData']['data'] as $row) {
+    if(count($row) == 2){
+      $statement->execute(array(
+        "colA"=> $row[0],
+        "colB"=> (int)($row[1])
+      ));
+    }
+  }
 }
