@@ -13,11 +13,13 @@ require 'db_functions.inc.php';
     echo "</br>Bye World....";
   ?>
   <div id='DBInterface'>
-    <form id='frm4' class='db-box'>
-      <input type="radio" value="test_table" name='radioTable' checked> Test table<br>
+    <form id='displayForm' class='db-box'>
+      <input type="radio" value="test_table" name='radioTable'> Test table<br>
+      <input type="radio" value="rbs_current" name='radioTable' checked> RBS Current<br>
       <input type="submit" value="Display table">
     </form>
-    <form id='frm3' class="db-box">
+
+    <form id='submitForm' class="db-box">
       CSV string: </br>
       <textarea id='csv_row' > </textarea></br>
       <input type="submit" value="Send rows">

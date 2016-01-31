@@ -32,16 +32,30 @@ function get_full_table($opts, $table_name){
   );
 }
 
-function addCSVRows($opts, $info){
-  $search_string = "INSERT INTO ". $info['tableName']." (col_a, col_b) values(:colA, :colB)";
+function addTestRows($opts, $info){
   $db = get_database($opts);
-  $statement = $db->prepare($search_string);
+  $statement = $db->prepare("INSERT INTO test_table VALUES (:col_a, :col_b)");  // foreach ($info['csvFormData']['data'] as $row) {
   foreach ($info['csvFormData']['data'] as $row) {
-    if(count($row) == 2){
-      $statement->execute(array(
-        "colA"=> $row[0],
-        "colB"=> (int)($row[1])
-      ));
-    }
-  }
+     if(count($row) == 2){
+     $statement->execute(array(
+         "col_a"=> $row[0],
+         "col_b"=> (int)($row[1])
+       ));
+     }
+   }
+}
+
+function addRbsRows($opts, $info){
+  $db = get_database($opts);
+  $statement = $db->prepare("INSERT INTO rbs_current VALUES (null, :date_col, :type_col, :desc_col, :val_col)");
+  foreach ($info['csvFormData']['data'] as $row) {
+     if(count($row) == 4){
+     $statement->execute(array(
+         "date_col"=> $row[0],
+         "type_col"=> $row[1],
+         "desc_col"=> $row[2],
+         "val_col"=> (float)($row[3])
+       ));
+     }
+   }
 }

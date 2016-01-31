@@ -4,7 +4,15 @@
   header('Content-Type: application/json');
 
   $posted_csv = $_POST;
-  addCSVRows($db_config, $posted_csv);
+
+  switch($posted_csv['tableName']){
+    case 'test_table':
+      addTestRows($db_config, $posted_csv);
+      break;
+     case 'rbs_current':
+      addRbsRows($db_config, $posted_csv);
+      break;
+  }
 
   $table = get_full_table($db_config, $posted_csv['tableName']);
 
