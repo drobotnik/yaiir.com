@@ -36,7 +36,7 @@ function addTestRows($opts, $info){
   $db = get_database($opts);
   $statement = $db->prepare("INSERT INTO test_table VALUES (:col_a, :col_b)");  // foreach ($info['csvFormData']['data'] as $row) {
   foreach ($info['csvFormData']['data'] as $row) {
-     if(count($row) == 2){
+     if(count($row) >= 2){
      $statement->execute(array(
          "col_a"=> $row[0],
          "col_b"=> (int)($row[1])
@@ -49,12 +49,46 @@ function addRbsRows($opts, $info){
   $db = get_database($opts);
   $statement = $db->prepare("INSERT INTO rbs_current VALUES (null, :date_col, :type_col, :desc_col, :val_col)");
   foreach ($info['csvFormData']['data'] as $row) {
-     if(count($row) == 4){
+     if(count($row) >= 4){
      $statement->execute(array(
          "date_col"=> $row[0],
          "type_col"=> $row[1],
          "desc_col"=> $row[2],
          "val_col"=> (float)($row[3])
+       ));
+     }
+   }
+}
+
+function addHBExpense($opts, $info){
+  $db = get_database($opts);
+  $statement = $db->prepare("INSERT INTO homeBudgetExpense values (null, :date_col, :category, :subcategory, :value, :account, :payee, :notes)");
+  foreach ($info['csvFormData']['data'] as $row) {
+     if(count($row) >= 8){
+     $statement->execute(array(
+         "date_col"=>$row[0],
+         "category"=>$row[1],
+         "subcategory"=>$row[2],
+         "value"=>(float)$row[3],
+         "account"=>$row[4],
+         "payee"=>$row[5],
+         "notes"=>$row[6]
+       ));
+     }
+   }
+}
+
+function addHBIncome($opts, $info){
+  $db = get_database($opts);
+  $statement = $db->prepare("INSERT INTO homeBudgetIncome values (null, :date_col, :category, :value, :account, :notes)");
+  foreach ($info['csvFormData']['data'] as $row) {
+     if(count($row) >= 5){
+     $statement->execute(array(
+         "date_col"=>$row[0],
+         "category"=>$row[1],
+         "value"=>(float)$row[2],
+         "account"=>$row[3],
+         "notes"=>$row[4]
        ));
      }
    }

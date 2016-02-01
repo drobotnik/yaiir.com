@@ -12,6 +12,12 @@
      case 'rbs_current':
       addRbsRows($db_config, $posted_csv);
       break;
+    case 'homeBudgetExpense':
+      addHBExpense($db_config, $posted_csv);
+      break;
+    case 'homeBudgetIncome':
+      addHBIncome($db_config, $posted_csv);
+      break;
   }
 
   $table = get_full_table($db_config, $posted_csv['tableName']);
