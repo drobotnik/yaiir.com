@@ -4,22 +4,9 @@
   header('Content-Type: application/json');
 
   $posted_csv = $_POST;
+  
+  addRows($db_config, $tableConfig, $posted_csv);
 
-  switch($posted_csv['tableName']){
-    case 'test_table':
-      addTestRows($db_config, $posted_csv);
-      break;
-     case 'rbs_current':
-      addRbsRows($db_config, $posted_csv);
-      break;
-    case 'homeBudgetExpense':
-      addHBExpense($db_config, $posted_csv);
-      break;
-    case 'homeBudgetIncome':
-      addHBIncome($db_config, $posted_csv);
-      break;
-  }
-
-  $table = get_full_table($db_config, $posted_csv['tableName']);
+  $table = get_full_table($db_config, $posted_csv['tableName'], $posted_csv['profileId']);
 
   echo json_encode($table);
